@@ -12,7 +12,7 @@ class ThemeModeNotifier extends ChangeNotifier {
   ThemeMode get mode => _themeMode;
 
   void _init(SharedPreferences pref) async {
-    _themeMode = await loadThemeMode(pref);
+    _themeMode = await loadThemeMode();
     notifyListeners();
   }
 

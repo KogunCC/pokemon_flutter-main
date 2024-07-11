@@ -40,6 +40,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  ThemeMode themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    super.initState();
+    loadThemeMode().then((val) => setState(() => themeMode = val));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeModeNotifier>(
@@ -61,17 +69,12 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  
   int currentbnb = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-          itemCount: 1010,
-          itemBuilder: (context, index) => PokeListItem(index: index),
-        ),
+        child: currentbnb == 0 ? const PokeList() : const Settings(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) => {
@@ -140,30 +143,6 @@ class _SettingsState extends State<Settings> {
             );
             setState(() => _themeMode = ret!);
             await saveThemeMode(_themeMode);
-          },
-        ),
-      ],
-    );
-  }
-}
-  ThemeMode _themeMode = ThemeMode.system;
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.lightbulb),
-          title: const Text('Dark/Light Mode'),
-          trailing: Text((_themeMode == ThemeMode.system)
-              ? 'System'
-              : (_themeMode == ThemeMode.dark ? 'Dark' : 'Light')),
-          onTap: () async {
-            var ret = await Navigator.of(context).push<ThemeMode>(
-              MaterialPageRoute(
-                builder: (context) => ThemeModeSelectionPage(mode: _themeMode),
-              ),
-            );
-            setState(() => _themeMode = ret!);
           },
         ),
       ],
